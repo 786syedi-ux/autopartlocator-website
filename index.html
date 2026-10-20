@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autopart Locator – Used Car & HTV Parts</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#14181f;--mut:#5d6675;--ac:#e8590c;--ac2:#14181f;--bd:#dfe3e8;--ok:#25d366;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101319;--card:#1a1f28;--tx:#eef1f5;--mut:#9aa4b2;--ac:#ff7a30;--ac2:#eef1f5;--bd:#2c3340}}
+:root[data-theme="dark"]{--bg:#101319;--card:#1a1f28;--tx:#eef1f5;--mut:#9aa4b2;--ac:#ff7a30;--ac2:#eef1f5;--bd:#2c3340}
+*{box-sizing:border-box}html{scroll-padding-top:70px}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:14px;padding:10px 16px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.5px}.logo b{color:var(--ac)}
+nav{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+nav a,.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:8px;text-decoration:none;cursor:pointer;font:inherit;font-size:14px}
+.btn.p,nav a.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 16px 60px}
+.hero{background:var(--ac2);color:var(--bg);border-radius:14px;padding:30px 22px;margin-bottom:18px}
+.hero h1{margin:0 0 6px;font-size:clamp(24px,5vw,38px)}.hero p{margin:0;opacity:.85}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.bar input,.f input,.f textarea,.adm input{padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit;width:100%}
+.bar input{flex:1;min-width:180px;width:auto}
+.chip.on{background:var(--tx);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.img{height:120px;display:grid;place-items:center;font-size:52px;background:linear-gradient(135deg,var(--bd),transparent)}
+.img img{width:100%;height:100%;object-fit:cover}
+.cb{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}.tag{font-size:12px;color:var(--mut)}
+.pr{font-weight:700;font-size:18px}.pr.na{font-size:14px;color:var(--mut);font-weight:500}
+.card .btn{margin-top:auto}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-top:18px}
+.f label{display:block;font-size:14px;margin:10px 0 4px;font-weight:600}
+.cart-i{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--bd);font-size:14px}
+.qty button{width:26px;height:26px;border-radius:6px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}
+.wa{background:var(--ok);border-color:var(--ok);color:#06310f;font-weight:700;width:100%;margin-top:14px;padding:12px}
+.err{color:#c92a2a;font-size:13px;min-height:18px}
+.adm table{width:100%;border-collapse:collapse;font-size:14px}.adm td,.adm th{padding:6px;border-bottom:1px solid var(--bd);text-align:left}.adm input{padding:6px 8px}
+.scroll{overflow-x:auto}
+.tc h2{margin:22px 0 6px;font-size:18px}.tc p,.tc li{color:var(--mut)}
+.note{font-size:13px;color:var(--mut)}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:20px}
+.hide{display:none}
+</style></head><body>
+<header><div class="logo">Autopart <b>Locator</b></div><nav><a href="#/" id="n1">Catalogue</a><a href="#/terms" id="n2">Terms & Conditions</a></nav></header>
+<div class="wrap">
+<section id="home">
+<div class="hero"><h1>Used car & HTV parts, delivered.</h1><p>Browse the catalogue, add parts to your order and send it to us on WhatsApp. We confirm availability and the final price with you.</p></div>
+<div class="bar"><input id="q" placeholder="Search parts (e.g. alternator, gearbox)…" aria-label="Search parts">
+<button class="btn chip on" data-c="all">All</button><button class="btn chip" data-c="Car">Car</button><button class="btn chip" data-c="HTV">HTV</button><select id="cs" class="btn" aria-label="Category"></select></div>
+<div class="grid" id="grid"></div>
+
+<div class="panel f" id="order">
+<h2 style="margin-top:0">Your order</h2>
+<div id="cart"><p class="note">No parts added yet. You can also describe the part you need below.</p></div>
+<label for="nm">Customer name *</label><input id="nm" autocomplete="name">
+<label for="ph">Phone number *</label><input id="ph" type="tel" autocomplete="tel" placeholder="10-digit mobile number">
+<label for="od">Order details (vehicle make/model/year, part needed, quantity) *</label><textarea id="od" rows="3"></textarea>
+<label for="ad">Delivery address *</label><textarea id="ad" rows="3"></textarea>
+<div class="err" id="err"></div>
+<button class="btn wa" id="send">Place order on WhatsApp</button>
+<p class="note">This opens WhatsApp with your order pre-filled. Your order is only placed once you send the message.</p>
+</div>
+</section>
+
+<section id="terms" class="hide tc panel">
+<h1 style="margin-top:0">Terms & Conditions</h1>
+<p>Last updated: October 2026. These are general terms for a used auto-parts business; please have them reviewed by a legal advisor before relying on them.</p>
+<h2>1. About us</h2><p>Autopart Locator (“we”, “us”) sells used and refurbished parts for cars and heavy transport vehicles (HTV). By placing an order you agree to these terms.</p>
+<h2>2. Used parts</h2><p>All parts are pre-owned. Photos are for reference and the part supplied may differ slightly in colour, wear or markings. Parts are sold in as-is working condition unless stated otherwise.</p>
+<h2>3. Ordering</h2><ul><li>Orders are placed by sending the pre-filled WhatsApp message to us.</li><li>An order is confirmed only when we reply and confirm availability, price and delivery time.</li><li>We may decline or cancel an order if stock is unavailable or details are incomplete.</li></ul>
+<h2>4. Pricing & payment</h2><p>Prices shown in the catalogue are indicative, in Indian Rupees, and may change without notice. The final price (including taxes and delivery) is confirmed on WhatsApp. Payment must be made as agreed before dispatch unless Cash on Delivery is confirmed in writing.</p>
+<h2>5. Compatibility</h2><p>Please share your vehicle make, model, year and, where possible, the part number or VIN. We help verify fitment, but the customer is responsible for confirming that the part suits the vehicle.</p>
+<h2>6. Delivery</h2><p>Delivery timelines are estimates. Delays caused by transport, weather or other events beyond our control are not grounds for compensation. Risk passes to you on delivery; please inspect the package on receipt and report visible damage within 24 hours.</p>
+<h2>7. Returns, refunds & warranty</h2><ul><li>Returns are accepted only for wrong or defective parts, reported within 7 days of delivery with photos or video.</li><li>Parts must be unused, unmodified and in original condition. Installed or altered parts are not returnable.</li><li>Electrical and electronic parts (ECU, sensors, cluster) are not returnable once installed.</li><li>Where a limited warranty is offered, its period will be confirmed at order time. Wear-and-tear and improper installation are excluded.</li><li>Approved refunds are issued to the original payment method within a reasonable time.</li></ul>
+<h2>8. Safety</h2><p>Safety-critical parts (brakes, steering, airbags, suspension) must be fitted by a qualified mechanic. We are not liable for loss arising from improper installation or use.</p>
+<h2>9. Limitation of liability</h2><p>To the extent permitted by law, our liability is limited to the price paid for the part concerned. We are not liable for indirect or consequential losses.</p>
+<h2>10. Lawful sourcing</h2><p>We source parts from lawful channels such as dismantled and scrapped vehicles. If you believe a listing infringes your rights, contact us and we will review it.</p>
+<h2>11. Privacy</h2><p>We use your name, phone number and address only to process and deliver your order and do not sell your data to third parties.</p>
+<h2>12. Governing law</h2><p>These terms are governed by the laws of India. Disputes are subject to the jurisdiction of the courts at our place of business.</p>
+<h2>13. Contact</h2><p>For any questions, message us on WhatsApp using the order button on the catalogue page.</p>
+</section>
+
+</div>
+<footer>© Autopart Locator · Used car & HTV parts</footer>
+<script src="parts.js"></script>
+<script>
+const D={wa:"",prices:{},imgs:{}};const S={cart:{},v:"all",c:"all",q:""};
+const $=s=>document.querySelector(s),esc=t=>String(t).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const inr=n=>"₹"+Number(n).toLocaleString("en-IN");
+$("#cs").innerHTML='<option value="all">All categories</option>'+Object.keys(CATS).map(c=>`<option>${esc(c)}</option>`).join("");
+function grid(){const q=S.q.toLowerCase();const r=P.filter(p=>(S.v=="all"||p.v==S.v)&&(S.c=="all"||p.c==S.c)&&(p.name+p.c+p.v).toLowerCase().includes(q));
+$("#grid").innerHTML=r.map(p=>{const pr=D.prices[p.id],im=D.imgs[p.id];return `<div class="card"><div class="img">${im?`<img src="${esc(im)}" alt="${esc(p.name)}" loading="lazy">`:p.ico}</div><div class="cb"><span class="tag">Used ${p.v} · ${esc(p.c)}</span><b>${esc(p.name)}</b><span class="pr${pr?"":" na"}">${pr?inr(pr):"Price on request"}</span><button class="btn p" data-add="${p.id}">Add to order</button></div></div>`}).join("")||'<p class="note">No parts match. Describe what you need in the order form below – we source parts on request.</p>'}
+function cart(){const ids=Object.keys(S.cart);$("#cart").innerHTML=ids.length?ids.map(id=>{const p=P.find(x=>x.id==id);return `<div class="cart-i"><span>${esc(p.name)} <span class="tag">(${p.v})</span></span><span class="qty"><button data-m="${id}">−</button> ${S.cart[id]} <button data-p="${id}">+</button></span></div>`}).join(""):'<p class="note">No parts added yet. You can also describe the part you need below.</p>'}
+function route(){const h=location.hash||"#/";const k=h.startsWith("#/terms")?"terms":"home";["home","terms"].forEach(s=>$("#"+s).classList.toggle("hide",s!=k));["n1","n2"].forEach((n,i)=>$("#"+n).classList.toggle("on",["home","terms"][i]==k));scrollTo(0,0)}
+document.addEventListener("click",e=>{const t=e.target;
+if(t.dataset.add){S.cart[t.dataset.add]=(S.cart[t.dataset.add]||0)+1;cart();t.textContent="Added ✓";setTimeout(()=>t.textContent="Add to order",900)}
+if(t.dataset.p){S.cart[t.dataset.p]++;cart()}
+if(t.dataset.m){if(--S.cart[t.dataset.m]<=0)delete S.cart[t.dataset.m];cart()}
+if(t.dataset.c){S.v=t.dataset.c;document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("on",c==t));grid()}});
+$("#cs").onchange=e=>{S.c=e.target.value;grid()};
+$("#q").oninput=e=>{S.q=e.target.value;grid()};
+$("#send").onclick=()=>{const nm=$("#nm").value.trim(),ph=$("#ph").value.replace(/[\s-]/g,""),od=$("#od").value.trim(),ad=$("#ad").value.trim(),er=$("#err");
+if(!nm||!od||!ad)return er.textContent="Please fill in your name, order details and delivery address.";
+if(!/^(\+?91)?[6-9]\d{9}$/.test(ph))return er.textContent="Please enter a valid 10-digit Indian mobile number.";
+if(!/^\d{10,15}$/.test(D.wa||""))return er.textContent="WhatsApp ordering isn’t set up yet. Please contact the store owner.";
+er.textContent="";const items=Object.keys(S.cart).map(id=>{const p=P.find(x=>x.id==id),pr=D.prices[id];return `• ${p.name} (${p.v}) x ${S.cart[id]}${pr?" – "+inr(pr)+" each":""}`}).join("\n");
+const m=`*New order – Autopart Locator*\nName: ${nm}\nPhone: ${ph}\n${items?"\n*Selected parts*\n"+items+"\n":""}\n*Order details*\n${od}\n\n*Delivery address*\n${ad}`;
+window.open("https://wa.me/"+D.wa+"?text="+encodeURIComponent(m),"_blank","noopener")};
+window.addEventListener("hashchange",route);grid();cart();route();
+fetch("prices.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{Object.assign(D,d);D.prices=d.prices||{};D.imgs=d.imgs||{};grid()}).catch(()=>{});
+
+</script></body></html>
