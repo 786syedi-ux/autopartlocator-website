@@ -1,5 +1,8 @@
 {
-  "wa": "",
-  "prices": {},
+  "wa": "917795567867",
+  "prices": {
+    "C-Lig-alternator": 15000,
+    "C-Lig-startermotor": 15000
+  },
   "imgs": {}
 }
